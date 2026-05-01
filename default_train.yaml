@@ -1,0 +1,32 @@
+# Default AutoBots training config.
+# Edit dataset, dataset_path, model_type, and map flags to reuse this with other datasets.
+
+exp_id: bi3_joint_default
+seed: 1
+disable_cuda: false
+save_dir: .
+
+dataset: bi3
+dataset_path: /home/socnav/Desktop/Bi3/trajectory_prediction
+use_map_image: false
+use_map_lanes: false
+
+model_type: Autobot-Joint
+num_modes: 6
+hidden_size: 128
+num_encoder_layers: 2
+num_decoder_layers: 2
+tx_hidden_size: 384
+tx_num_heads: 16
+dropout: 0.1
+
+entropy_weight: 40.0
+kl_weight: 20.0
+use_FDEADE_aux_loss: true
+
+batch_size: 64
+learning_rate: 0.00075
+adam_epsilon: 0.0001
+learning_rate_sched: [10, 20, 30, 40, 50]
+grad_clip_norm: 5
+num_epochs: 150

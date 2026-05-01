@@ -1,0 +1,8 @@
+# Default AutoBots evaluation config.
+# models_path points to the best-ADE checkpoint produced by default_train.yaml.
+
+models_path: results/bi3/Autobot_joint_C6_H128_E2_D2_TXH384_NH16_EW40_KLW20_NormLoss_bi3_joint_default_s1/best_models_ade.pth
+dataset_path: /home/socnav/Desktop/Bi3/trajectory_prediction
+eval_split: val
+batch_size: 64
+disable_cuda: false

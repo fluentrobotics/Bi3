@@ -6,6 +6,7 @@ We include support for the following datasets:
 - [Argoverse](https://www.argoverse.org/av1.html) (ego-agent)
 - [TrajNet++](https://www.aicrowd.com/challenges/trajnet-a-trajectory-forecasting-challenge) Synthetic dataset (multi-agent)
 - [Interaction-Dataset](https://interaction-dataset.com/) (multi-agent)
+- Bi3 (ego-agent, multi-agent)
 
 Visit our [webpage](https://fgolemo.github.io/autobots/) for more information.
 
@@ -54,6 +55,27 @@ Training AutoBot-Joint on TrajNet++:
 python train.py --exp-id test --seed 1 --dataset trajnet++ --model-type Autobot-Joint --num-modes 6 --hidden-size 128 --num-encoder-layers 2 --num-decoder-layers 2 --dropout 0.1 --entropy-weight 40.0 --kl-weight 20.0 --use-FDEADE-aux-loss True --tx-hidden-size 384 --batch-size 64 --learning-rate 0.00075 --learning-rate-sched 10 20 30 40 50 --dataset-path /path/to/root/of/npy_files
 ```
 
+#### Bi3
+Convert Bi3 JSON files to trajectory prediction files:
+```
+./.venv/bin/python datasets/bi3/create_data_npys.py --bi3-root /home/socnav/Desktop/Bi3 --output-root /home/socnav/Desktop/Bi3/trajectory_prediction --overwrite
+```
+
+Training AutoBot-Ego on Bi3:
+```
+./.venv/bin/python train.py --exp-id bi3_ego --seed 1 --dataset bi3 --model-type Autobot-Ego --num-modes 6 --hidden-size 128 --num-encoder-layers 2 --num-decoder-layers 2 --dropout 0.1 --entropy-weight 40.0 --kl-weight 20.0 --use-FDEADE-aux-loss True --tx-hidden-size 384 --batch-size 64 --learning-rate 0.00075 --learning-rate-sched 10 20 30 40 50 --dataset-path /home/socnav/Desktop/Bi3/trajectory_prediction
+```
+
+Training AutoBot-Joint on Bi3:
+```
+./.venv/bin/python train.py --exp-id bi3_joint --seed 1 --dataset bi3 --model-type Autobot-Joint --num-modes 6 --hidden-size 128 --num-encoder-layers 2 --num-decoder-layers 2 --dropout 0.1 --entropy-weight 40.0 --kl-weight 20.0 --use-FDEADE-aux-loss True --tx-hidden-size 384 --batch-size 64 --learning-rate 0.00075 --learning-rate-sched 10 20 30 40 50 --dataset-path /home/socnav/Desktop/Bi3/trajectory_prediction
+```
+
+The same Bi3 Joint defaults can be run from the checked-in config:
+```
+./.venv/bin/python train.py --config default_train.yaml
+```
+
 #### Interaction-Dataset
 Training AutoBot-Joint on the Interaction-Dataset while using the raw road segments in the map:
 ```
@@ -68,6 +90,11 @@ For all experiments, you can evaluate the trained model on the validation datase
 python evaluate.py --dataset-path /path/to/root/of/interaction_dataset_h5_files --models-path results/{Dataset}/{exp_name}/{model_epoch}.pth --batch-size 64
 ```
 Note that the batch-size may need to be reduced for the Interaction-dataset since evaluation is performed on all agent scenes.
+
+For the default Bi3 Joint config, evaluate the best-ADE checkpoint with:
+```
+./.venv/bin/python evaluate.py --config default_eval.yaml
+```
 
 
 ### Extra scripts 
@@ -107,5 +134,3 @@ If you use this repository, please cite our work:
   url={https://openreview.net/forum?id=Dup_dDqkZC5}
 }
 ```
-
-

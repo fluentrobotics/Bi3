@@ -2,6 +2,7 @@ import random
 import numpy as np
 import torch
 from datasets.argoverse.dataset import ArgoH5Dataset
+from datasets.bi3.dataset import Bi3Dataset
 from datasets.interaction_dataset.dataset import InteractionDataset
 from datasets.nuscenes.dataset import NuscenesH5Dataset
 from datasets.trajnetpp.dataset import TrajNetPPDataset
@@ -31,21 +32,25 @@ class Evaluator:
 
     def initialize_dataloader(self):
         if "Nuscenes" in self.model_config.dataset:
-            val_dset = NuscenesH5Dataset(dset_path=self.args.dataset_path, split_name="val",
+            val_dset = NuscenesH5Dataset(dset_path=self.args.dataset_path, split_name=self.args.eval_split,
                                          model_type=self.model_config.model_type,
                                          use_map_img=self.model_config.use_map_image,
                                          use_map_lanes=self.model_config.use_map_lanes)
 
         elif "interaction-dataset" in self.model_config.dataset:
-            val_dset = InteractionDataset(dset_path=self.args.dataset_path, split_name="val",
+            val_dset = InteractionDataset(dset_path=self.args.dataset_path, split_name=self.args.eval_split,
                                           use_map_lanes=self.model_config.use_map_lanes, evaluation=True)
             self.interact_eval = True
 
         elif "trajnet++" in self.model_config.dataset:
-            val_dset = TrajNetPPDataset(dset_path=self.model_config.dataset_path, split_name="val")
+            val_dset = TrajNetPPDataset(dset_path=self.args.dataset_path, split_name=self.args.eval_split)
+
+        elif "bi3" in self.model_config.dataset:
+            val_dset = Bi3Dataset(dset_path=self.args.dataset_path, split_name=self.args.eval_split,
+                                  model_type=self.model_config.model_type)
 
         elif "Argoverse" in self.model_config.dataset:
-            val_dset = ArgoH5Dataset(dset_path=self.args.dataset_path, split_name="val",
+            val_dset = ArgoH5Dataset(dset_path=self.args.dataset_path, split_name=self.args.eval_split,
                                      use_map_lanes=self.model_config.use_map_lanes)
 
         else:
@@ -64,7 +69,7 @@ class Evaluator:
             pin_memory=False
         )
 
-        print("Val dataset loaded with length", len(val_dset))
+        print("{} dataset loaded with length".format(self.args.eval_split.capitalize()), len(val_dset))
 
     def initialize_model(self):
         if "Ego" in self.model_config.model_type:

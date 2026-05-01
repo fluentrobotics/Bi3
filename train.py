@@ -4,6 +4,7 @@ import numpy as np
 import random
 
 from datasets.argoverse.dataset import ArgoH5Dataset
+from datasets.bi3.dataset import Bi3Dataset
 from datasets.interaction_dataset.dataset import InteractionDataset
 from datasets.trajnetpp.dataset import TrajNetPPDataset
 from models.autobot_joint import AutoBotJoint
@@ -15,7 +16,16 @@ import torch
 import torch.distributions as D
 from torch import optim, nn
 from torch.optim.lr_scheduler import MultiStepLR
-from torch.utils.tensorboard import SummaryWriter
+
+try:
+    from torch.utils.tensorboard import SummaryWriter
+except ModuleNotFoundError:
+    class SummaryWriter:
+        def __init__(self, *args, **kwargs):
+            print("TensorBoard is not installed; training metrics will not be written.")
+
+        def add_scalar(self, *args, **kwargs):
+            pass
 
 from utils.metric_helpers import min_xde_K
 from utils.train_helpers import nll_loss_multimodes, nll_loss_multimodes_joint
@@ -63,6 +73,12 @@ class Trainer:
         elif "trajnet++" in self.args.dataset:
             train_dset = TrajNetPPDataset(dset_path=self.args.dataset_path, split_name="train")
             val_dset = TrajNetPPDataset(dset_path=self.args.dataset_path, split_name="val")
+
+        elif "bi3" in self.args.dataset:
+            train_dset = Bi3Dataset(dset_path=self.args.dataset_path, split_name="train",
+                                    model_type=self.args.model_type)
+            val_dset = Bi3Dataset(dset_path=self.args.dataset_path, split_name="val",
+                                  model_type=self.args.model_type)
 
         elif "Argoverse" in self.args.dataset:
             train_dset = ArgoH5Dataset(dset_path=self.args.dataset_path, split_name="train",
