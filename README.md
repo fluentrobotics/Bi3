@@ -36,18 +36,16 @@ For the default Bi3 Joint config, evaluate the best-ADE checkpoint with:
 ./{path to venv}/bin/python evaluate.py --config default_eval.yaml
 ```
 
-```
+
 
 ## Reference
 
 If you use this repository, please cite our work:
-
 ```
-@misc{stratton2026bi3dataset,
-  author       = {Stratton, Andrew and Singamaneni, Phani Teja and Goyal, Pranav and Alami, Rachid and Mavrogiannis, Christoforos},
-  title        = {{Bi$^3$}: A Biplatform, Bicultural, Biperson Dataset for Social Robot Navigation},
-  year         = {2026},
-  howpublished = {\url{https://fluentrobotics.com/pdfs/stratton2026bi3dataset.pdf}},
-  note         = {Accessed: 2026-04-30}
+@inproceedings{stratton2026bi3dataset,
+  author    = {Stratton, Andrew and Singamaneni, Phani Teja and Goyal, Pranav and Alami, Rachid and Mavrogiannis, Christoforos},
+  title     = {Bi3: A Biplatform, Bicultural, Biperson Dataset for Social Robot Navigation},
+  booktitle   = {Proceedings of the IEEE International Conference on Robotics and Automation (ICRA)},
+  year      = {2026},
 }
 ```
